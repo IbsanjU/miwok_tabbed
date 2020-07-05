@@ -104,9 +104,9 @@ class NumbersFragment extends Fragment {
     View onCreateView(LayoutInflater inflater, ViewGroup container,
                       Bundle savedInstanceState) {
 
-//        View rootView = inflater.inflate(R.layout.fragment_numbers, container, false);
+        View rootView = inflater.inflate(R.layout.word_list, container, false);
 
-        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        mAudioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
 
         final ArrayList<Word> words = new ArrayList<Word>();
         words.add(new Word("one", "lutti", R.drawable.number_one, R.raw.number_one));
@@ -120,9 +120,9 @@ class NumbersFragment extends Fragment {
         words.add(new Word("nine", "wo’e", R.drawable.number_nine, R.raw.number_nine));
         words.add(new Word("ten", "na’aacha", R.drawable.number_ten, R.raw.number_ten));
 
-        WordAdapter adapter = new WordAdapter(this, words, R.color.category_numbers);
+        WordAdapter adapter = new WordAdapter(getActivity(), words, R.color.category_numbers);
 
-        ListView listView = (ListView) findViewById(R.id.list);
+        ListView listView = (ListView) rootView.findViewById(R.id.list);
 
         listView.setAdapter(adapter);
 
@@ -140,7 +140,7 @@ class NumbersFragment extends Fragment {
                 int result = mAudioManager.requestAudioFocus(mOnAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
 
                 if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-                    mMediaPlayer = MediaPlayer.create(NumbersActivity.this, word.getAudioResourceId());
+                    mMediaPlayer = MediaPlayer.create(getActivity(), word.getAudioResourceId());
 
                     mMediaPlayer.start();
 
@@ -148,7 +148,7 @@ class NumbersFragment extends Fragment {
                 }
             }
         });
-        return inflater.inflate(R.layout.fragment_numbers, container, false);;
+        return rootView;
     }
 
     private
@@ -159,6 +159,7 @@ class NumbersFragment extends Fragment {
             mAudioManager.abandonAudioFocus(mOnAudioFocusChangeListener);
         }
     }
+
     @Override
     public
     void onStop() {
